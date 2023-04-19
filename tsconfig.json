@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "es2021",
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "outDir": "dist",
+    "declarationDir": "dist",
+    "rootDir": "./lib",
+    "allowJs": false,
+    "declaration": true,
+    "removeComments": false,
+    "strict": false,
+    "alwaysStrict": false
+  },
+  "include": [
+    "lib/**/*.ts"
+  ]
+}
