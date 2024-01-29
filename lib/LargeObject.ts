@@ -15,7 +15,10 @@ export const enum Seek {
  * Represents an opened large object.
  */
 export class LargeObject {
-  constructor(private query: PGClient["query"], private fd: number) {}
+  constructor(
+    private query: PGClient["query"],
+    private fd: number,
+  ) {}
 
   /**
    * Closes this large object.
@@ -31,7 +34,7 @@ export class LargeObject {
   async read(length: number): Promise<Buffer> {
     const result: QueryResult<{ data: Buffer }> = await this.query(
       "SELECT loread($1, $2) as data",
-      [this.fd, length]
+      [this.fd, length],
     );
     return result.rows[0].data;
   }
@@ -47,7 +50,7 @@ export class LargeObject {
   async seek(position: number, ref: Seek): Promise<number> {
     const result: QueryResult<{ location: number }> = await this.query(
       "SELECT lo_lseek64($1, $2, $3) as location",
-      [this.fd, position, ref]
+      [this.fd, position, ref],
     );
     return result.rows[0].location;
   }
@@ -59,7 +62,7 @@ export class LargeObject {
   async tell(): Promise<number> {
     const result: QueryResult<{ position: number }> = await this.query(
       "SELECT lo_tell64($1) as position",
-      [this.fd]
+      [this.fd],
     );
     return result.rows[0].position;
   }
@@ -73,7 +76,7 @@ export class LargeObject {
         "(SELECT lo_lseek64($1, 0, 2) AS SIZE, tell.location FROM " +
         "(SELECT lo_tell64($1) AS location) tell) " +
         "seek;",
-      [this.fd]
+      [this.fd],
     );
     return result.rows[0].size;
   }
